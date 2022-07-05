@@ -1,2 +1,2 @@
 # MHB-Ecommerce
-Sell your products through this project
+This management system has created for realstates to manage their properties and their prices
