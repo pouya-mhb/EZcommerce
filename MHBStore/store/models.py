@@ -1,3 +1,49 @@
 from django.db import models
 
-# Create your models here.
+
+class Product (models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    inventory = models.IntegerField()
+    last_update = models.DateTimeField(auto_now_add=True)
+    creted_at = models.DateTimeField(auto_created=True)
+
+
+membership_gold = 'G'
+membership_silver = 'S'
+membership_bronze = 'B'
+
+
+membership_choices = [
+    (membership_gold, 'Gold'),
+    (membership_silver, 'Silver'),
+    (membership_bronze, 'Bronze')
+]
+
+
+class Customer (models.Model):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    email = models.CharField(unique=True)
+    phone = models.CharField(max_length=255)
+    birth_date = models.DateField(null=True)
+    membership = models.CharField(
+        max_length=1, choices=membership_choices, default='B')
+
+
+PAYMENT_STATUS_PENDING = 'P'
+PAYMENT_STATUS_SUCCESS = 'S'
+PAYMENT_STATUS_FAILED = 'F'
+
+PAYMENT_CHOICES = [
+    (PAYMENT_STATUS_PENDING, 'Pending'),
+    (PAYMENT_STATUS_SUCCESS, 'Success'),
+    (PAYMENT_STATUS_FAILED, 'Failed')
+]
+
+
+class Order(models.Model):
+    placed_at = models.DateTimeField(auto_now_add=True)
+    payment_status = models.CharField(
+        choices=PAYMENT_CHOICES, default=PAYMENT_STATUS_PENDING)
