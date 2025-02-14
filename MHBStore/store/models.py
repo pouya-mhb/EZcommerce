@@ -1,6 +1,12 @@
 from django.db import models
 
 
+class Promotion (models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    discount = models.FloatField()
+
+
 class Category:
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -9,6 +15,7 @@ class Category:
 
 class Product (models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    promotions = models.ManyToManyField(Promotion,)
     title = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
