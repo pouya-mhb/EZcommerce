@@ -7,15 +7,22 @@ class Promotion (models.Model):
     discount = models.FloatField()
 
 
-class Category:
+class Category (models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     creted_at = models.DateTimeField(auto_created=True)
+    featured_product = models.ForeignKey(
+        'Product', on_delete=models.SET_NULL, null=True, related_name='+')
+    '''
+        * on_delete=models.SET_NULL -> to delete a featured product for the category, set this field to null
+        * use 'Product' to resolve conflicts Product name class. the string will not be update later in order to class name changes
+        *  related_name='+' -> django will not create the reverse relation ship
+    '''
 
 
 class Product (models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
-    promotions = models.ManyToManyField(Promotion,)
+    promotions = models.ManyToManyField(Promotion)
     title = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
@@ -39,7 +46,7 @@ membership_choices = [
 class Customer (models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    email = models.CharField(unique=True)
+    email = models.CharField(max_length=255, unique=True)
     phone = models.CharField(max_length=255)
     birth_date = models.DateField(null=True)
     membership = models.CharField(
@@ -61,8 +68,8 @@ class Order(models.Model):
     customer = models.ForeignKey(
         Customer, on_delete=models.PROTECT)
     placed_at = models.DateTimeField(auto_now_add=True)
-    payment_status = models.CharField(
-        choices=PAYMENT_CHOICES, default=PAYMENT_STATUS_PENDING)
+    payment_status = models.CharField(max_length=1,
+                                      choices=PAYMENT_CHOICES, default=PAYMENT_STATUS_PENDING)
 
 
 class OrderItem(models.Model):
