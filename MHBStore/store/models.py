@@ -1,7 +1,14 @@
 from django.db import models
 
 
+class Category:
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    creted_at = models.DateTimeField(auto_created=True)
+
+
 class Product (models.Model):
+    category = models.ForeignKey(Category, on_delete=models.PROTECT)
     title = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
@@ -44,6 +51,35 @@ PAYMENT_CHOICES = [
 
 
 class Order(models.Model):
+    customer = models.ForeignKey(
+        Customer, on_delete=models.PROTECT)
     placed_at = models.DateTimeField(auto_now_add=True)
     payment_status = models.CharField(
         choices=PAYMENT_CHOICES, default=PAYMENT_STATUS_PENDING)
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.PROTECT)
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    quantity = models.PositiveSmallIntegerField()
+    unit_price = models.DecimalField(max_digits=6, decimal_places=2)
+
+
+class Address(models.Model):
+    customer = models.ForeignKey(
+        Customer, on_delete=models.CASCADE)
+    country = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    street1 = models.CharField(max_length=255)
+    street2 = models.CharField(max_length=255, null=True)
+
+
+class Cart (models.Model):
+    creted_at = models.DateTimeField(auto_now_add=True)
+
+
+class CartItem (models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE)  # CASCADE is for delete a product from all shopping carts
+    quantity = models.PositiveSmallIntegerField()
