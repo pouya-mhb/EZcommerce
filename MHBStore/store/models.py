@@ -22,6 +22,7 @@ class Category (models.Model):
 
 class Product (models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    slug = models.SlugField(default='-', null=True)
     promotions = models.ManyToManyField(Promotion)
     title = models.CharField(max_length=255)
     description = models.TextField()
