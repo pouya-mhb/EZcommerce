@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 
 
@@ -10,7 +11,8 @@ class Promotion (models.Model):
 class Category (models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    creted_at = models.DateTimeField(auto_created=True)
+    creted_at = models.DateTimeField(
+        auto_created=True, default=datetime.now, blank=True)
     featured_product = models.ForeignKey(
         'Product', on_delete=models.SET_NULL, null=True, related_name='+')
     '''
