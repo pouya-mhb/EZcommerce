@@ -11,10 +11,10 @@ class Promotion (models.Model):
 class Category (models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    creted_at = models.DateTimeField(
-        auto_created=True, default=datetime.now, blank=True)
-    featured_product = models.ForeignKey(
-        'Product', on_delete=models.SET_NULL, null=True, related_name='+')
+    # creted_at = models.DateTimeField(
+    #     auto_created=True, default=datetime.now, blank=True)
+    # featured_product = models.ForeignKey(
+    #     'Product', on_delete=models.SET_NULL, null=True, related_name='+')
     '''
         * on_delete=models.SET_NULL -> to delete a featured product for the category, set this field to null
         * use 'Product' to resolve conflicts Product name class. the string will not be update later in order to class name changes
@@ -23,7 +23,7 @@ class Category (models.Model):
 
 
 class Product (models.Model):
-    category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, null=True)
     slug = models.SlugField(default='-', null=True)
     promotions = models.ManyToManyField(Promotion)
     title = models.CharField(max_length=255)
@@ -31,7 +31,10 @@ class Product (models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
     inventory = models.IntegerField()
     last_update = models.DateTimeField(auto_now_add=True)
-    creted_at = models.DateTimeField(auto_created=True)
+    # creted_at = models.DateTimeField(auto_created=True)
+
+    class Meta():
+        return self.title
 
 
 membership_gold = 'G'
