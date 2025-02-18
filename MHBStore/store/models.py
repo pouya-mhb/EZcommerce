@@ -53,6 +53,14 @@ class Customer (models.Model):
     membership = models.CharField(
         max_length=1, choices=membership_choices, default='B')
 
+    class Meta:
+        db_table = 'store_customers'
+        indexes = [  # for speed up queries
+            models.Index(
+                fields=['last_name', 'first_name']
+            )
+        ]
+
 
 PAYMENT_STATUS_PENDING = 'P'
 PAYMENT_STATUS_SUCCESS = 'S'
